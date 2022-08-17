@@ -10,13 +10,28 @@ class StarProvider extends React.Component {
     super();
     this.state = {
       planetasInfo: [],
+      filterByName: '',
+      planetasFiltrados: [],
     };
   }
 
   requisitandoPlanetas = async () => {
     const resposta = await fetch('https://swapi-trybe.herokuapp.com/api/planets/');
     const data = await resposta.json();
-    this.setState({ planetasInfo: data.results });
+    this.setState({ planetasInfo: data.results.filter((get) => (
+      delete get.residents
+    )) });
+  }
+
+  filtrarPlanetas = () => {
+    const { filterByName, planetasInfo } = this.state;
+    const resultado = planetasInfo.filter((get) => get.name.includes(filterByName));
+    this.setState({ planetasFiltrados: resultado });
+  }
+
+  handleChange = (evento) => {
+    const { name, value } = evento.target;
+    this.setState({ [name]: value }, () => this.filtrarPlanetas());
   }
 
   render() {
@@ -27,6 +42,7 @@ class StarProvider extends React.Component {
         value={ {
           ...this.state,
           requisitandoPlanetas: this.requisitandoPlanetas,
+          handleChange: this.handleChange,
         } }
       >
         {children}
