@@ -19,6 +19,29 @@ function Table() {
         data-testid="name-filter"
         onChange={ handleChange }
       />
+      <select data-testid="column-filter">
+        <option>population</option>
+        <option>orbital_period</option>
+        <option>rotation_period</option>
+        <option>surface_water</option>
+      </select>
+      <select data-testid="comparison-filter">
+        <option>maior que</option>
+        <option>menor que</option>
+        <option>igual a</option>
+      </select>
+      <input
+        type="number"
+        name="numero"
+        data-testid="value-filter"
+      />
+      <button
+        type="button"
+        data-testid="button-filter"
+      >
+        Filtrar
+
+      </button>
       <table>
         <tr>
           <th>name</th>
