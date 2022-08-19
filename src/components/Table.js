@@ -19,6 +19,7 @@ function Table() {
     maisPlanetas,
     click,
     handleClick2,
+    selectFiltros,
   } = useContext(StarContext);
 
   useEffect(() => { requisitandoPlanetas(); }, []);
@@ -58,11 +59,7 @@ function Table() {
         value={ filtro }
         onChange={ handleChange }
       >
-        <option>population</option>
-        <option>orbital_period</option>
-        <option>diameter</option>
-        <option>rotation_period</option>
-        <option>surface_water</option>
+        {selectFiltros.map((get) => (<option key={ get }>{get}</option>))}
       </select>
       <select
         name="comparacao"

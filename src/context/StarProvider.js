@@ -20,7 +20,20 @@ class StarProvider extends React.Component {
       filtrosAntigos: [],
       click: -1,
       maisPlanetas: [],
+      selectFiltros: [
+        'population',
+        'orbital_period',
+        'diameter',
+        'rotation_period',
+        'surface_water'],
     };
+  }
+
+  apagandoFiltros = async () => {
+    const { selectFiltros, filtro } = this.state;
+    const novosFiltros = await selectFiltros.filter((get) => get !== filtro);
+    this.setState({ selectFiltros: novosFiltros }, () => (
+      this.setState({ filtro: novosFiltros[0] })));
   }
 
   requisitandoPlanetas = async () => {
@@ -123,6 +136,7 @@ salvandoValoresAntigo = () => {
         this.setState({ clicado: true })));
     }
     this.setState({ clicado: true });
+    this.apagandoFiltros();
   }
 
   handleClick2 = () => {
@@ -161,6 +175,7 @@ salvandoValoresAntigo = () => {
         this.setState({ clicado: true })));
     }
     this.setState({ clicado: true });
+    this.apagandoFiltros();
   }
 
   handleTR = (param) => (param.map((get) => (
