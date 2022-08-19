@@ -13,57 +13,28 @@ function Table() {
     filtro,
     clicado,
     handleClick,
-    PlanetasFiltradosInputFunc,
+    handleTR,
+    filtrosAntigos,
+    PlanetasFiltradosInput,
+    maisPlanetas,
+    click,
   } = useContext(StarContext);
 
   useEffect(() => { requisitandoPlanetas(); }, []);
 
-  function planetasInfoFunc() {
-    return (planetasInfo.map((get) => (
-      <tr key={ get.name }>
-        <td>{get.name}</td>
-        <td>{get.rotation_period}</td>
-        <td>{get.orbital_period}</td>
-        <td>{get.diameter}</td>
-        <td>{get.climate}</td>
-        <td>{get.gravity}</td>
-        <td>{get.terrain}</td>
-        <td>{get.surface_water}</td>
-        <td>{get.population}</td>
-        <td>{get.films}</td>
-        <td>{get.created}</td>
-        <td>{get.edited}</td>
-        <td>{get.url}</td>
-      </tr>
-    )));
-  }
-
   function odeioOLint() {
     if (filterByName.length > 0) {
-      return (planetasFiltrados.map((get) => (
-        <tr key={ get.name }>
-          <td>{get.name}</td>
-          <td>{get.rotation_period}</td>
-          <td>{get.orbital_period}</td>
-          <td>{get.diameter}</td>
-          <td>{get.climate}</td>
-          <td>{get.gravity}</td>
-          <td>{get.terrain}</td>
-          <td>{get.surface_water}</td>
-          <td>{get.population}</td>
-          <td>{get.films}</td>
-          <td>{get.created}</td>
-          <td>{get.edited}</td>
-          <td>{get.url}</td>
-        </tr>
-      )));
+      return handleTR(planetasFiltrados);
     }
 
     if (clicado === true) {
-      return PlanetasFiltradosInputFunc();
+      return handleTR(PlanetasFiltradosInput);
+    }
+    if (click > 0) {
+      return handleTR(maisPlanetas);
     }
 
-    return planetasInfoFunc();
+    return handleTR(planetasInfo);
   }
 
   return (
@@ -112,6 +83,15 @@ function Table() {
         Filtrar
 
       </button>
+      <div>
+        {
+          filtrosAntigos.map((get) => (
+            <p key={ `${get.comparacao}${get.numero}` }>
+              {`${get.filtro}  ${get.comparacao} ${get.numero}`}
+            </p>
+          ))
+        }
+      </div>
       <table>
         <tr>
           <th>name</th>

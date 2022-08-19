@@ -1,4 +1,4 @@
-// funcinalidades e paradas que o lint exige XD
+// funcionalidades e paradas que o lint exige XD
 import React from 'react';
 import PropTypes from 'prop-types';
 
@@ -17,6 +17,9 @@ class StarProvider extends React.Component {
       filtro: 'population',
       PlanetasFiltradosInput: [],
       clicado: false,
+      filtrosAntigos: [],
+      click: -1,
+      maisPlanetas: [],
     };
   }
 
@@ -39,6 +42,52 @@ class StarProvider extends React.Component {
     this.setState({ [name]: value }, () => this.filtrarPlanetas());
   }
 
+moreFilter = () => {
+  const { filtrosAntigos, click } = this.state;
+  const elemento = filtrosAntigos[click];
+  const { numero, filtro, comparacao, PlanetasFiltradosInput } = elemento;
+  const maior = PlanetasFiltradosInput.filter((get) => (
+    Number(get[filtro]) > Number(numero)));
+  const menor = PlanetasFiltradosInput.filter((get) => (
+    Number(get[filtro]) < Number(numero)));
+  const igual = PlanetasFiltradosInput.filter((get) => (
+    Number(get[filtro]) === Number(numero)));
+
+  switch (comparacao) {
+  case 'maior que':
+    this.setState({ maisPlanetas: maior }, () => (
+      this.setState({ clicado: true })));
+    break;
+  case 'menor que':
+    this.setState({ maisPlanetas: menor }, () => (
+      this.setState({ clicado: true })));
+    break;
+  case 'igual a':
+    this.setState({ maisPlanetas: igual }, () => (
+      this.setState({ clicado: true })));
+    break;
+  default:
+  }
+}
+
+salvandoValoresAntigo = () => {
+  const {
+    numero,
+    comparacao,
+    filtro,
+    PlanetasFiltradosInput,
+  } = this.state;
+
+  this.setState((prev) => (
+    {
+      filtrosAntigos: [...prev.filtrosAntigos, {
+        numero,
+        comparacao,
+        filtro,
+        PlanetasFiltradosInput,
+      }] }), () => this.moreFilter());
+}
+
   handleClick = () => {
     const {
       planetasInfo,
@@ -46,6 +95,7 @@ class StarProvider extends React.Component {
       comparacao,
       filtro,
     } = this.state;
+    this.setState((prev) => ({ click: prev.click + 1 }));
     const maior = planetasInfo.filter((get) => (
       Number(get[filtro]) > Number(numero)));
     const menor = planetasInfo.filter((get) => (
@@ -55,43 +105,44 @@ class StarProvider extends React.Component {
     switch (comparacao) {
     case 'maior que':
       this.setState({ PlanetasFiltradosInput: maior }, () => (
-        this.setState({ clicado: true })));
+        this.salvandoValoresAntigo()
+      ));
       break;
     case 'menor que':
       this.setState({ PlanetasFiltradosInput: menor }, () => (
-        this.setState({ clicado: true })));
+        this.salvandoValoresAntigo()
+      ));
       break;
     case 'igual a':
       this.setState({ PlanetasFiltradosInput: igual }, () => (
-        this.setState({ clicado: true })));
+        this.salvandoValoresAntigo()
+      ));
       break;
     default:
       return this.setState({ PlanetasFiltradosInput: planetasInfo }, () => (
         this.setState({ clicado: true })));
     }
+    this.setState({ clicado: true });
   }
 
-  PlanetasFiltradosInputFunc = () => {
-    const { PlanetasFiltradosInput } = this.state;
-    return (PlanetasFiltradosInput.map((get) => (
-      <tr key={ get.name }>
-        <td>{get.name}</td>
-        <td>{get.rotation_period}</td>
-        <td>{get.orbital_period}</td>
-        <td>{get.diameter}</td>
-        <td>{get.climate}</td>
-        <td>{get.gravity}</td>
-        <td>{get.terrain}</td>
-        <td>{get.surface_water}</td>
-        <td>{get.population}</td>
-        <td>{get.films}</td>
-        <td>{get.created}</td>
-        <td>{get.edited}</td>
-        <td>{get.url}</td>
-      </tr>
-    ))
-    );
-  }
+  handleTR = (param) => (param.map((get) => (
+    <tr key={ get.name }>
+      <td>{get.name}</td>
+      <td>{get.rotation_period}</td>
+      <td>{get.orbital_period}</td>
+      <td>{get.diameter}</td>
+      <td>{get.climate}</td>
+      <td>{get.gravity}</td>
+      <td>{get.terrain}</td>
+      <td>{get.surface_water}</td>
+      <td>{get.population}</td>
+      <td>{get.films}</td>
+      <td>{get.created}</td>
+      <td>{get.edited}</td>
+      <td>{get.url}</td>
+    </tr>
+  ))
+  )
 
   render() {
     const { Provider } = StarContext;
@@ -103,7 +154,7 @@ class StarProvider extends React.Component {
           requisitandoPlanetas: this.requisitandoPlanetas,
           handleChange: this.handleChange,
           handleClick: this.handleClick,
-          PlanetasFiltradosInputFunc: this.PlanetasFiltradosInputFunc,
+          handleTR: this.handleTR,
         } }
       >
         {children}
