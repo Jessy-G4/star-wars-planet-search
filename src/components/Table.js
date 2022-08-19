@@ -18,6 +18,7 @@ function Table() {
     PlanetasFiltradosInput,
     maisPlanetas,
     click,
+    handleClick2,
   } = useContext(StarContext);
 
   useEffect(() => { requisitandoPlanetas(); }, []);
@@ -35,6 +36,11 @@ function Table() {
     }
 
     return handleTR(planetasInfo);
+  }
+
+  function handleClicks() {
+    if (click > 0) { return handleClick2(); }
+    return handleClick();
   }
 
   return (
@@ -78,7 +84,7 @@ function Table() {
       <button
         type="button"
         data-testid="button-filter"
-        onClick={ handleClick }
+        onClick={ handleClicks }
       >
         Filtrar
 

@@ -125,6 +125,44 @@ salvandoValoresAntigo = () => {
     this.setState({ clicado: true });
   }
 
+  handleClick2 = () => {
+    const {
+      filtrosAntigos,
+      numero,
+      comparacao,
+      filtro,
+      click,
+    } = this.state;
+    this.setState((prev) => ({ click: prev.click + 1 }));
+    const maior = filtrosAntigos[click].PlanetasFiltradosInput.filter((get) => (
+      Number(get[filtro]) > Number(numero)));
+    const menor = filtrosAntigos[click].PlanetasFiltradosInput.filter((get) => (
+      Number(get[filtro]) < Number(numero)));
+    const igual = filtrosAntigos[click].PlanetasFiltradosInput.filter((get) => (
+      Number(get[filtro]) === Number(numero)));
+    switch (comparacao) {
+    case 'maior que':
+      this.setState({ PlanetasFiltradosInput: maior }, () => (
+        this.salvandoValoresAntigo()
+      ));
+      break;
+    case 'menor que':
+      this.setState({ PlanetasFiltradosInput: menor }, () => (
+        this.salvandoValoresAntigo()
+      ));
+      break;
+    case 'igual a':
+      this.setState({ PlanetasFiltradosInput: igual }, () => (
+        this.salvandoValoresAntigo()
+      ));
+      break;
+    default:
+      return this.setState({ PlanetasFiltradosInput: planetasInfo }, () => (
+        this.setState({ clicado: true })));
+    }
+    this.setState({ clicado: true });
+  }
+
   handleTR = (param) => (param.map((get) => (
     <tr key={ get.name }>
       <td>{get.name}</td>
@@ -155,6 +193,7 @@ salvandoValoresAntigo = () => {
           handleChange: this.handleChange,
           handleClick: this.handleClick,
           handleTR: this.handleTR,
+          handleClick2: this.handleClick2,
         } }
       >
         {children}
