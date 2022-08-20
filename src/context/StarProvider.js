@@ -180,7 +180,7 @@ salvandoValoresAntigo = () => {
 
   handleTR = (param) => (param.map((get) => (
     <tr key={ get.name }>
-      <td>{get.name}</td>
+      <td data-testid="planet-name">{get.name}</td>
       <td>{get.rotation_period}</td>
       <td>{get.orbital_period}</td>
       <td>{get.diameter}</td>
